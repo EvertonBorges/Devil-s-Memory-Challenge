@@ -14,9 +14,6 @@ public class PowerUpMoviment : MonoBehaviour {
     [SerializeField]
     private PowerUpEnum powerUpEnum = PowerUpEnum.DOUBLE_PUSH;
 
-    [SerializeField]
-    private PlayerEnum playerEnum = PlayerEnum.PLAYER1;
-
     private float _realSpeed = 0f;
     private PowerUpController _powerUpController;
     private Transform _destroyPosition;
@@ -56,10 +53,8 @@ public class PowerUpMoviment : MonoBehaviour {
     private void OnTriggerEnter(Collider collider) {
         if (collider.CompareTag("Player")) {
             PlayerMoviment playerScript = collider.GetComponent<PlayerMoviment>();
-            if (playerEnum == playerScript.GetPlayerEnum()) {
-                playerScript.GetPowerUp(powerUpEnum);
-                DestroyPowerUp();
-            }
+            playerScript.GetPowerUp(powerUpEnum);
+            DestroyPowerUp();
         }
     }
 

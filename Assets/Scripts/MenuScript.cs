@@ -5,11 +5,11 @@ using UnityEngine;
 public class MenuScript : MonoBehaviour {
 
     [SerializeField]
-    private AudioSource audioStart;
+    private AudioSource audioStart = null;
     [SerializeField]
-    private AudioSource audioLoop;
+    private AudioSource audioLoop = null;
     [SerializeField]
-    private AudioSource audioFinal;
+    private AudioSource audioFinal = null;
 
     private bool _playTime = false;
     private bool _isPlaying = false;

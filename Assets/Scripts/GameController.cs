@@ -7,9 +7,9 @@ using UnityEngine.UI;
 public class GameController : MonoBehaviour {
 
     [SerializeField]
-    private Image panelWin;
+    private Image panelWin = null;
     [SerializeField]
-    private Text textWin;
+    private Text textWin = null;
 
     private bool _isPaused = false;
     private PowerUpController _powerUpController = null;
@@ -33,7 +33,6 @@ public class GameController : MonoBehaviour {
     }
 
     public void Win(PlayerEnum playerEnum) {
-        Debug.Log("GameController: Player " + (playerEnum == PlayerEnum.PLAYER1 ? 1 : 2) + " WIN");
         panelWin.gameObject.SetActive(true);
         if (playerEnum == PlayerEnum.PLAYER1) {
             textWin.text = "Player 1 WIN";

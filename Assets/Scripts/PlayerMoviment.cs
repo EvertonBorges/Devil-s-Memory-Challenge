@@ -31,8 +31,12 @@ public class PlayerMoviment : MonoBehaviour {
     [SerializeField]
     private int maxMemories = 0;
 
+    [SerializeField]
+    private Image pushButton = null;
+
     // Push Parameters
     private bool _canPush = false;
+    private float _currentTimeToRecoverPush = 2f;
     private int _powerPush = 1;
 
     // Z Moviment
@@ -81,6 +85,14 @@ public class PlayerMoviment : MonoBehaviour {
         if ((transform.position.z >= 3.125f || transform.position.z <= -3.125f) && _isAlive) {
             Die();
             return;
+        }
+
+        if (!_canPush) {
+            _currentTimeToRecoverPush -= Time.deltaTime;
+            pushButton.fillAmount = (2f - _currentTimeToRecoverPush) / 2f;
+            if (_currentTimeToFinishPowerUpDoublePush < 0f) {
+                _canPush = true;
+            }
         }
 
         PowerUps();
@@ -216,7 +228,7 @@ public class PlayerMoviment : MonoBehaviour {
             PlayerMoviment scriptEnemy = collider.GetComponent<PlayerMoviment>();
             if (scriptEnemy.CompareTimeZInMoviment(_timeInZMoviment)) {
                 bool hitByTop = (scriptEnemy.transform.position.z - transform.position.z) > 0;
-                float nextZPosition = transform.position.z + _powerPush * (hitByTop ? -1.25f : 1.25f);
+                float nextZPosition = transform.position.z + scriptEnemy.GetPowerPush() * (hitByTop ? -1.25f : 1.25f);
                 transform.position = new Vector3(transform.position.x, transform.position.y, nextZPosition);
             }
         }
@@ -244,11 +256,19 @@ public class PlayerMoviment : MonoBehaviour {
 
     private void PostDie() {
         _animator.speed = 0f;
+        PlayerEnum winPlayer = (playerEnum == PlayerEnum.PLAYER1) ? PlayerEnum.PLAYER2 : PlayerEnum.PLAYER1;
+        _gameController.Win(winPlayer);
         Destroy(gameObject);
     }
 
     public PlayerEnum GetPlayerEnum() {
         return playerEnum;
+    }
+
+    public int GetPowerPush() {
+        _canPush = false;
+        _currentTimeToRecoverPush = 2f;
+        return _powerPush;
     }
 
     public void GetPowerUp(PowerUpEnum powerUp) {
@@ -275,7 +295,6 @@ public class PlayerMoviment : MonoBehaviour {
         panelMemory.size = (float)_memories / (float)maxMemories;
 
         if (_memories == maxMemories) {
-            Debug.Log("PlayerMoviment: Player " + (playerEnum == PlayerEnum.PLAYER1 ? 1 : 2) + " WIN");
             _gameController.Win(playerEnum);
         }
     }

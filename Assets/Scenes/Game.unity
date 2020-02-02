@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.44657844, g: 0.49641222, b: 0.57481694, a: 1}
+  m_IndirectSpecularColor: {r: 0.43667546, g: 0.48427135, b: 0.5645225, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -255,7 +255,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 256
   panelMemory: {fileID: 1965172332}
-  maxMemories: 1
+  maxMemories: 4
+  pushButton: {fileID: 671073098}
 --- !u!95 &106538329
 Animator:
   serializedVersion: 3
@@ -884,7 +885,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 256
   panelMemory: {fileID: 1362119848}
-  maxMemories: 1
+  maxMemories: 4
+  pushButton: {fileID: 561084460}
 --- !u!65 &633241077
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1128,7 +1130,7 @@ Light:
   m_BounceIntensity: 1
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
-  m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
+  m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 4e-45}
   m_UseBoundingSphereOverride: 0
   m_ShadowRadius: 0
   m_ShadowAngle: 0
@@ -1139,13 +1141,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 705507993}
-  m_LocalRotation: {x: 0.40821788, y: -0.23456968, z: 0.10938163, w: 0.8754261}
+  m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
 --- !u!1 &731822335
 GameObject:
   m_ObjectHideFlags: 0
@@ -1424,7 +1426,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: b67d4e3336b56664681490209388000b, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 06ec1d6a989536246922ed3beae9cbcd, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
@@ -1713,11 +1715,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   powerUpPrefabs:
   - {fileID: 8283389654911584399, guid: 1c0921d1cb4629d4b984eb1ef875caf5, type: 3}
-  - {fileID: 8283389654911584399, guid: 0b78ec193552d5b49addb7e4aa37dcf1, type: 3}
   - {fileID: 8283389654911584399, guid: 3231bdd6445ca644cb6c765b12cbffd7, type: 3}
-  - {fileID: 8283389654911584399, guid: a9a1a662dad18d24485811de682a2a6a, type: 3}
   - {fileID: 8283389654911584399, guid: e2bf6555011ae9d438725688b4c31828, type: 3}
-  - {fileID: 8283389654911584399, guid: 8c178d6ff4007014ab23ee1ba730d2a0, type: 3}
   spawnPowerUps: {fileID: 487160854}
   timeToSpawnPowerUps: 3
 --- !u!114 &1081866044
