@@ -82,6 +82,8 @@ public class PlayerMoviment : MonoBehaviour {
 
         if (_isPaused) Pause();
 
+        _animator.SetBool("IsAlive", _isAlive);
+
         if ((transform.position.z >= 3.125f || transform.position.z <= -3.125f) && _isAlive) {
             Die();
             return;
@@ -226,11 +228,18 @@ public class PlayerMoviment : MonoBehaviour {
 
         if (collider.CompareTag("Player")) {
             PlayerMoviment scriptEnemy = collider.GetComponent<PlayerMoviment>();
+            bool hitByTop = (scriptEnemy.transform.position.z - transform.position.z) > 0;
+
             if (scriptEnemy.CompareTimeZInMoviment(_timeInZMoviment)) {
-                bool hitByTop = (scriptEnemy.transform.position.z - transform.position.z) > 0;
                 float nextZPosition = transform.position.z + scriptEnemy.GetPowerPush() * (hitByTop ? -1.25f : 1.25f);
                 transform.position = new Vector3(transform.position.x, transform.position.y, nextZPosition);
+                _animator.SetTrigger("Get");
+            } else {
+                _animator.SetTrigger("Push");
             }
+
+            if (hitByTop) _animator.SetTrigger("Up");
+            else _animator.SetTrigger("Down");
         }
     }
 
