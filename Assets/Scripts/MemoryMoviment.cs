@@ -7,9 +7,6 @@ public class MemoryMoviment : MonoBehaviour {
     [SerializeField]
     private float speed = 4f;
 
-    [SerializeField]
-    private PlayerEnum playerEnum = PlayerEnum.PLAYER1;
-
     private float _realSpeed = 0f;
     private MemoryController _memoryController;
     private Transform _destroyPosition;
@@ -49,10 +46,8 @@ public class MemoryMoviment : MonoBehaviour {
     private void OnTriggerEnter(Collider collider) {
         if (collider.CompareTag("Player")) {
             PlayerMoviment playerScript = collider.GetComponent<PlayerMoviment>();
-            if (playerEnum == playerScript.GetPlayerEnum()) {
-                playerScript.GetMemory();
-                DestroyMemory();
-            }
+            playerScript.GetMemory();
+            DestroyMemory();
         }
     }
 

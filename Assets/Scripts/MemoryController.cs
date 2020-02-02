@@ -56,7 +56,7 @@ public class MemoryController : MonoBehaviour {
     public void SetPause(bool isPaused) {
         _isPaused = isPaused;
         _memories.ForEach(delegate (GameObject powerUp) {
-            PowerUpMoviment powerUpScript = powerUp.GetComponent<PowerUpMoviment>();
+            MemoryMoviment powerUpScript = powerUp.GetComponent<MemoryMoviment>();
             powerUpScript.SetPause(_isPaused);
         });
     }

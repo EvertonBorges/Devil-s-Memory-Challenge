@@ -45,7 +45,7 @@ public class PlayerMoviment : MonoBehaviour {
     private AudioSource powerUpSound = null;
 
     // Push Parameters
-    private int _maxPushCount = 6;
+    private int _maxPushCount = 8;
     private int _pushCount = 0;
     private int _powerPush = 1;
 
@@ -334,6 +334,10 @@ public class PlayerMoviment : MonoBehaviour {
 
     private void UpdatePushPanel() {
         pushButton.fillAmount = (float)_pushCount / (float)_maxPushCount;
+    }
+
+    public void SetPause(bool pause) {
+        _isPaused = pause;
     }
 
 }
