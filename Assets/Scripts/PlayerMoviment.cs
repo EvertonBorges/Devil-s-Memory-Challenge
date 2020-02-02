@@ -26,7 +26,7 @@ public class PlayerMoviment : MonoBehaviour {
     private LayerMask groundLayer = 0;
 
     [SerializeField]
-    private Scrollbar panelMemory = null;
+    private Text textMemory = null;
 
     [SerializeField]
     private int maxMemories = 0;
@@ -34,9 +34,19 @@ public class PlayerMoviment : MonoBehaviour {
     [SerializeField]
     private Image pushButton = null;
 
+    [Header("Sounds")]
+    [SerializeField]
+    private AudioSource jumpAudio = null;
+    [SerializeField]
+    private AudioSource dieAudio = null;
+    [SerializeField]
+    private AudioSource hitAudio = null;
+    [SerializeField]
+    private AudioSource powerUpSound = null;
+
     // Push Parameters
-    private bool _canPush = false;
-    private float _currentTimeToRecoverPush = 2f;
+    private int _maxPushCount = 6;
+    private int _pushCount = 0;
     private int _powerPush = 1;
 
     // Z Moviment
@@ -69,6 +79,7 @@ public class PlayerMoviment : MonoBehaviour {
     private GameController _gameController;
 
     void Awake() {
+        _pushCount = _maxPushCount;
         _currentSpeed = speedMoviment;
         _speedFast = speedMoviment * _multiplierFast;
         _speedSlow = speedMoviment * _multiplierSlow;
@@ -76,6 +87,8 @@ public class PlayerMoviment : MonoBehaviour {
         _animator = GetComponent<Animator>();
         _rigidbody = GetComponent<Rigidbody>();
         _gameController = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
+
+        UpdatePushPanel();
     }
 
     void Update() {
@@ -87,14 +100,6 @@ public class PlayerMoviment : MonoBehaviour {
         if ((transform.position.z >= 3.125f || transform.position.z <= -3.125f) && _isAlive) {
             Die();
             return;
-        }
-
-        if (!_canPush) {
-            _currentTimeToRecoverPush -= Time.deltaTime;
-            pushButton.fillAmount = (2f - _currentTimeToRecoverPush) / 2f;
-            if (_currentTimeToFinishPowerUpDoublePush < 0f) {
-                _canPush = true;
-            }
         }
 
         PowerUps();
@@ -145,6 +150,7 @@ public class PlayerMoviment : MonoBehaviour {
         bool isToJump = (playerEnum == PlayerEnum.PLAYER1) ? Input.GetKeyDown(KeyCode.Space) : Input.GetKeyDown(KeyCode.LeftShift);
 
         if (_isOnGround && isToJump) {
+            jumpAudio.Play();
             _animator.SetTrigger("Jump");
             _rigidbody.AddForce(Vector3.up * jumpForce);
         }
@@ -233,8 +239,10 @@ public class PlayerMoviment : MonoBehaviour {
             if (scriptEnemy.CompareTimeZInMoviment(_timeInZMoviment)) {
                 float nextZPosition = transform.position.z + scriptEnemy.GetPowerPush() * (hitByTop ? -1.25f : 1.25f);
                 transform.position = new Vector3(transform.position.x, transform.position.y, nextZPosition);
+                hitAudio.Play();
                 _animator.SetTrigger("Get");
             } else {
+
                 _animator.SetTrigger("Push");
             }
 
@@ -259,6 +267,7 @@ public class PlayerMoviment : MonoBehaviour {
     }
 
     private void Die() {
+        dieAudio.Play();
         _isAlive = false;
         _animator.SetTrigger("Die");
     }
@@ -266,6 +275,11 @@ public class PlayerMoviment : MonoBehaviour {
     private void PostDie() {
         _animator.speed = 0f;
         PlayerEnum winPlayer = (playerEnum == PlayerEnum.PLAYER1) ? PlayerEnum.PLAYER2 : PlayerEnum.PLAYER1;
+        //winAudio.Play();
+        Win(winPlayer);
+    }
+
+    private void Win(PlayerEnum winPlayer) {
         _gameController.Win(winPlayer);
         Destroy(gameObject);
     }
@@ -275,16 +289,26 @@ public class PlayerMoviment : MonoBehaviour {
     }
 
     public int GetPowerPush() {
-        _canPush = false;
-        _currentTimeToRecoverPush = 2f;
+        _pushCount--;
+        if (_pushCount < 0) {
+            _pushCount = 0;
+        }
+        UpdatePushPanel();
         return _powerPush;
     }
 
     public void GetPowerUp(PowerUpEnum powerUp) {
+        powerUpSound.Play();
+
         switch (powerUp) {
             case PowerUpEnum.DOUBLE_PUSH:
+                _pushCount++;
+                if (_pushCount > _maxPushCount) {
+                    _pushCount = _maxPushCount;
+                }
                 _currentTimeToFinishPowerUpDoublePush = 2f;
                 _powerPush = 2;
+                UpdatePushPanel();
                 break;
             case PowerUpEnum.FAST:
                 _currentTimeToFinishPowerUpFast = 2f;
@@ -301,11 +325,15 @@ public class PlayerMoviment : MonoBehaviour {
 
     public void GetMemory() {
         _memories++;
-        panelMemory.size = (float)_memories / (float)maxMemories;
+        textMemory.text = _memories.ToString();
 
         if (_memories == maxMemories) {
-            _gameController.Win(playerEnum);
+            Win(playerEnum);
         }
+    }
+
+    private void UpdatePushPanel() {
+        pushButton.fillAmount = (float)_pushCount / (float)_maxPushCount;
     }
 
 }

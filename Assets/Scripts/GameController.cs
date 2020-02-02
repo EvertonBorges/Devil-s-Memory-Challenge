@@ -35,9 +35,9 @@ public class GameController : MonoBehaviour {
     public void Win(PlayerEnum playerEnum) {
         panelWin.gameObject.SetActive(true);
         if (playerEnum == PlayerEnum.PLAYER1) {
-            textWin.text = "Player 1 WIN";
+            textWin.text = "PLAYER 1 WIN";
         } else {
-            textWin.text = "Player 2 WIN";
+            textWin.text = "PLAYER 2 WIN";
         }
     }
 
