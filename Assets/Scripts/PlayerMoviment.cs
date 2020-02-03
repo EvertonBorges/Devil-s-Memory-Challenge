@@ -93,7 +93,7 @@ public class PlayerMoviment : MonoBehaviour {
 
     void Update() {
 
-        if (_isPaused) Pause();
+        if (_isPaused) return;
 
         _animator.SetBool("IsAlive", _isAlive);
 
@@ -338,6 +338,7 @@ public class PlayerMoviment : MonoBehaviour {
 
     public void SetPause(bool pause) {
         _isPaused = pause;
+        Pause();
     }
 
 }
